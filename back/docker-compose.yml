@@ -1,0 +1,11 @@
+version: '3.8'
+services:
+  flask:
+    build: ./docker/flask
+    ports: 
+      - 9000:80
+    volumes:
+      - ./app:/workspace
+    working_dir: /workspace
+    command: python server.py
+    
