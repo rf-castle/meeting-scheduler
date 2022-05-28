@@ -24,6 +24,7 @@ class calendarController():
     def getEmptyDates():
 
         busy_times = CalendarAPI.fetch_start_and_end_datetime_of_events()
+        print(busy_times)
         
         empty_dates = util.calcEmptyDate(busy_times)
 
