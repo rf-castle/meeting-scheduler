@@ -17,7 +17,7 @@ class Calendar:
     def get_url_for_permission():
 
         flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials2.json', SCOPES)
+                'credentials.json', SCOPES)
         flow.redirect_uri=REDIRECT_URI
         url_for_permission, _ = flow.authorization_url()
         print(url_for_permission)
