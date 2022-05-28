@@ -6,31 +6,29 @@ from google.oauth2.credentials import Credentials
 from datetime import datetime, timedelta
 from parse import *
 from calendar_api import CalendarAPI
+import lib.util as util
 
 #### 必ず Google Calendar の Timezone を日本にすること!!!!!!
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 REDIRECT_URI = "http://localhost:9000/oauth2callback"
-LENGTH_OF_TIME_NOTATION = 5
-BEGIN_CANDIDATE_TIME = datetime.strptime('10:00',"%H:%M")
-END_CANDIDATE_TIME = datetime.strptime('18:00',"%H:%M")
-PERIOD_OF_EMPTY_DATE = 30
-NUM_OF_FETCH_EVENT_FROM_GOOGLE_CALENDAR = 100
+
 
 class calendarController():
-    def getHtml(self):
-        return "<h1>test Class</h1>"
 
     @staticmethod
-    def testController(testText):
-        return "test controller " + testText
+    def testController():
+        return util.getWholeEmptyTimes()
 
     @staticmethod
     def getEmptyDates():
 
-        start_and_end_datetime_of_events = CalendarAPI.fetch_start_and_end_datetime_of_events()
-        print(start_and_end_datetime_of_events)
-        return "ok"
+        busy_times = CalendarAPI.fetch_start_and_end_datetime_of_events()
+        
+        empty_dates = util.calcEmptyDate(busy_times)
+
+        #empty_dates = ("2022-05-26", "2022-05-27")
+        return empty_dates
 
     @staticmethod
     def registerCandidates(company_name, candidate_dates):
