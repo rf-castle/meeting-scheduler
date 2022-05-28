@@ -1,16 +1,47 @@
-use chrono::{DateTime, TimeZone};
+use chrono::{DateTime, TimeZone, Utc};
+use reqwest::Result;
+
+const ENDPOINT: &str = "";
 
 type DateRange<Tz> = (DateTime<Tz>, DateTime<Tz>);
 
 #[derive(Default, Clone)]
-pub(crate) struct FreeDateArgs {
+pub struct FreeDateArgs {
 
 }
 
-pub(crate) trait API{
+pub trait API{
     // Todo: ログイン
-    fn search_reserved_date(&self, company: &str);
-    fn check_free_date(&self, args: &FreeDateArgs);
-    fn reserve_date<Tz: TimeZone>(&self, company: &str, dates: &[DateRange<Tz>]);
-    fn decide_date<Tz: TimeZone>(&self, company: &str, date: DateRange<Tz>);
+    fn search_reserved_date(&self, company: &str) -> Result<()>;
+    fn check_free_date(&self, args: &FreeDateArgs) -> Result<Vec<DateRange<Utc>>>;
+    fn reserve_date<Tz: TimeZone>(&self, company: &str, dates: &[DateRange<Tz>]) -> Result<()>;
+    fn decide_date<Tz: TimeZone>(&self, company: &str, date: &DateRange<Tz>) -> Result<()>;
+}
+pub struct APIImpl{
+
+}
+
+impl APIImpl{
+    pub fn new() -> Self{
+        APIImpl{}
+    }
+}
+
+impl API for APIImpl {
+
+    fn search_reserved_date(&self, company: &str) -> Result<()> {
+        Ok(())
+    }
+
+    fn check_free_date(&self, args: &FreeDateArgs) -> Result<Vec<DateRange<Utc>>> {
+        Ok(vec![])
+    }
+
+    fn reserve_date<Tz: TimeZone>(&self, company: &str, dates: &[DateRange<Tz>]) -> Result<()> {
+        Ok(())
+    }
+
+    fn decide_date<Tz: TimeZone>(&self, company: &str, date: &DateRange<Tz>) -> Result<()> {
+        Ok(())
+    }
 }

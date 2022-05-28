@@ -1,4 +1,5 @@
 mod api;
-mod command;
+pub mod command;
 mod util;
 
+pub use api::{API, APIImpl};
