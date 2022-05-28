@@ -1,12 +1,21 @@
 from google.oauth2.credentials import Credentials
+# from back.app.calendar_test import Calendar
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
-import datetime
+from datetime import datetime, timedelta
+from parse import *
+from calendar_api import CalendarAPI
+
+#### 必ず Google Calendar の Timezone を日本にすること!!!!!!
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 REDIRECT_URI = "http://localhost:9000/oauth2callback"
-
+LENGTH_OF_TIME_NOTATION = 5
+BEGIN_CANDIDATE_TIME = datetime.strptime('10:00',"%H:%M")
+END_CANDIDATE_TIME = datetime.strptime('18:00',"%H:%M")
+PERIOD_OF_EMPTY_DATE = 30
+NUM_OF_FETCH_EVENT_FROM_GOOGLE_CALENDAR = 100
 
 class calendarController():
     def getHtml(self):
@@ -18,38 +27,44 @@ class calendarController():
 
     @staticmethod
     def getEmptyDates():
-        # calendar API
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-        service = build('calendar', 'v3', credentials=creds)
 
-        empty_dates = ("2022-05-26", "2022-05-27")
-        return empty_dates
+        start_and_end_datetime_of_events = CalendarAPI.fetch_start_and_end_datetime_of_events()
+        print(start_and_end_datetime_of_events)
+        return "ok"
 
     @staticmethod
     def registerCandidates(company_name, candidate_dates):
-        # calendar API
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-        service = build('calendar', 'v3', credentials=creds)
 
-        # 候補日を登録
+        # calendar API
+        response_dict = CalendarAPI.register_candidates(company_name, candidate_dates)
 
         #（日程確認メール送信）
         
-        status_code = 200
-        return status_code
+        return response_dict
 
     @staticmethod
-    def registerInterviewDate(company_name, interview_dates):
+    def registerInterviewDate(company_name, interview_date):
+
         # calendar API
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-        service = build('calendar', 'v3', credentials=creds)
+        response_dict = CalendarAPI.register_interview_date(company_name, interview_date)
 
-        #面接日を登録
+        #（日程確認メール送信）
+        return response_dict
 
-        #（候補日を削除）
-        
-        status_code = 200
-        return status_code
+    @staticmethod
+    def fetchInterviewDates():
+
+        response_dict = CalendarAPI.fetch_interview_dates()
+
+        return response_dict
+
+    @staticmethod
+    def fetchCandidateDatesByCompanyName(company_name):
+
+        response_dict = CalendarAPI.fetch_candidate_dates_by_company_name(company_name)
+
+        return response_dict
+
 
     @staticmethod
     def getUrlForPermission():
@@ -72,27 +87,5 @@ class calendarController():
                 token.write(creds.to_json())
         return 
     
-    @staticmethod
-    def fetchEventList():
 
-        creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-        service = build('calendar', 'v3', credentials=creds)
-
-
-        # 予定の取得
-        now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-        print('Getting the upcoming 10 events')
-        events_result = service.events().list(calendarId='primary', timeMin=now,
-                                            maxResults=10, singleEvents=True,
-                                            orderBy='startTime').execute()
-        events = events_result.get('items', [])
-
-        if not events:
-            print('No upcoming events found.')
-        for event in events:
-            # dateTime: 時間指定の予定だったら，ここに入る
-            start = event['start'].get('dateTime', event['start'].get('date'))
-            print(type(start))
-            print(start, event['summary'])
-
-        return 
+    
