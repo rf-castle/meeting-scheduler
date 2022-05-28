@@ -9,6 +9,10 @@ def index():
     test = "testaaaa"
     return calendarController.testController(test)
 
+@app.route("/test")
+def test():
+    return jsonify(calendarController.testController())
+
 # 空いている日程を取得
 @app.route("/empty-dates")
 def getEmptyDates():

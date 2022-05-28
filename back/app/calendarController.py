@@ -3,18 +3,17 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.oauth2.credentials import Credentials
 import datetime
+import lib.util as util
 
 SCOPES = ['https://www.googleapis.com/auth/calendar']
 REDIRECT_URI = "http://localhost:9000/oauth2callback"
 
 
 class calendarController():
-    def getHtml(self):
-        return "<h1>test Class</h1>"
 
     @staticmethod
-    def testController(testText):
-        return "test controller " + testText
+    def testController():
+        return util.getWholeEmptyTimes()
 
     @staticmethod
     def getEmptyDates():
@@ -22,7 +21,23 @@ class calendarController():
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
         service = build('calendar', 'v3', credentials=creds)
 
-        empty_dates = ("2022-05-26", "2022-05-27")
+        busy_times = (
+            {
+                "start": "2022-05-28T15:00:00+09:00",
+                "end": "2022-05-28T16:00:00+09:00"
+            },
+            {
+                "start": "2022-05-29T11:00:00+09:00",
+                "end": "2022-05-29T12:00:00+09:00"
+            },
+            {
+                "start": "2022-05-29T13:00:00+09:00",
+                "end": "2022-05-29T17:00:00+09:00"
+            }
+        )
+        empty_dates = util.calcEmptyDate(busy_times)
+
+        #empty_dates = ("2022-05-26", "2022-05-27")
         return empty_dates
 
     @staticmethod
