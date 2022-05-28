@@ -128,7 +128,7 @@ class CalendarAPI:
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
         calendar_service = build('calendar', 'v3', credentials=creds)
 
-        events = CalendarAPI.fetch_events(calendar_service)
+        events = CalendarAPI.fetch_events_in_two_weeks(calendar_service)
         start_and_end_datetime_by_rfc_of_events_list = []
 
         for event in events:
@@ -171,6 +171,22 @@ class CalendarAPI:
         now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
        
         events_result = calendar_service.events().list(calendarId='primary', timeMin=now,
+                                            maxResults=NUM_OF_FETCH_EVENT_FROM_GOOGLE_CALENDAR, singleEvents=True,
+                                            orderBy='startTime').execute()
+        events = events_result.get('items', [])
+
+        return events
+
+    @staticmethod
+    def fetch_events_in_two_weeks(calendar_service):
+
+        now = datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
+        after_two_weeks = (datetime.utcnow() +timedelta(weeks=2)).isoformat() + 'Z'
+        print("2週間後")
+        print(after_two_weeks)
+
+        events_result = calendar_service.events().list(calendarId='primary', timeMin=now,
+                                            timeMax=after_two_weeks,
                                             maxResults=NUM_OF_FETCH_EVENT_FROM_GOOGLE_CALENDAR, singleEvents=True,
                                             orderBy='startTime').execute()
         events = events_result.get('items', [])
