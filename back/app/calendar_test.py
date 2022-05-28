@@ -20,12 +20,11 @@ class Calendar:
                 'credentials.json', SCOPES)
         flow.redirect_uri=REDIRECT_URI
         url_for_permission, _ = flow.authorization_url()
-        print(url_for_permission)
         return url_for_permission
 
 
     def store_credentials(code):
-        print("store!!")
+        
         flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials2.json', SCOPES)
         flow.redirect_uri=REDIRECT_URI
@@ -48,8 +47,6 @@ class Calendar:
                                             maxResults=10, singleEvents=True,
                                             orderBy='startTime').execute()
         events = events_result.get('items', [])
-
-        
 
         if not events:
             print('No upcoming events found.')
