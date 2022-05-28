@@ -1,12 +1,32 @@
 from flask import Flask, request
 from calendar_test import Calendar
+from calendarController import calendarController
 
 app = Flask(__name__)
 
-
 @app.route("/")
 def index():
-    return "<h1>Hello, Flask!</h1>"
+    test = "testaaaa"
+    return calendarController.testController(test)
+
+# 空いている日程を取得
+@app.route("/empty-dates")
+def getEmptyDates():
+    return jsonify(calendarController.getEmptyDates())
+
+# 候補日を登録
+@app.route("/candidate-dates", methods=['POST'])
+def registerCandidates():
+    company_name = str(request.form.get("company"))
+    candidate_dates = request.form.get("candidate_dates")
+    return jsonify(calendarController.registerCandidates(company_name, candidate_dates))
+
+# 面接日を登録
+@app.route("/interview-date", methods=['POST'])
+def registerInterviewDate():
+    company_name = str(request.form.get("company"))
+    interview_dates = request.form.get("candidate_dates")
+    return jsonify(calendarController.registerInterviewDate(company_name, interview_dates))
 
 
 @app.route("/calendar-permission")
