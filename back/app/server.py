@@ -30,20 +30,20 @@ def registerInterviewDate():
 
 
 @app.route("/calendar-permission")
-def get_url_for_permission():
-    url = Calendar.get_url_for_permission()
+def getUrlForPermission():
+    url = Calendar.getUrlForPermission()
     return url
 
 @app.route("/oauth2callback")
-def store_credentials():
+def storeCredentials():
     print(request.args.get("code"))
-    Calendar.store_credentials(request.args.get("code"))
+    Calendar.storeCredentials(request.args.get("code"))
     return "カレンダーの連携完了"
 
 
 @app.route("/calendar-list")
-def fetch_event_list():
-    Calendar.fetch_event_list()
+def fetchEventList():
+    Calendar.fetchEventList()
     return "取得"
 
 if __name__ == "__main__":

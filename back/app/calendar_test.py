@@ -14,7 +14,7 @@ REDIRECT_URI = "http://localhost:9000/oauth2callback"
 
 class Calendar:
 
-    def get_url_for_permission():
+    def getUrlForPermission():
 
         flow = InstalledAppFlow.from_client_secrets_file(
                 'credentials.json', SCOPES)
@@ -23,10 +23,10 @@ class Calendar:
         return url_for_permission
 
 
-    def store_credentials(code):
+    def storeCredentials(code):
         
         flow = InstalledAppFlow.from_client_secrets_file(
-                'credentials2.json', SCOPES)
+                'credentials.json', SCOPES)
         flow.redirect_uri=REDIRECT_URI
         flow.fetch_token(code=code)
         creds = flow.credentials
@@ -34,7 +34,7 @@ class Calendar:
                 token.write(creds.to_json())
         return 
        
-    def fetch_event_list():
+    def fetchEventList():
 
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
         service = build('calendar', 'v3', credentials=creds)
