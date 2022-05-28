@@ -31,19 +31,19 @@ def registerInterviewDate():
 
 @app.route("/calendar-permission")
 def getUrlForPermission():
-    url = Calendar.getUrlForPermission()
+    url = calendarController.getUrlForPermission()
     return url
 
 @app.route("/oauth2callback")
 def storeCredentials():
     print(request.args.get("code"))
-    Calendar.storeCredentials(request.args.get("code"))
+    calendarController.storeCredentials(request.args.get("code"))
     return "カレンダーの連携完了"
 
 
 @app.route("/calendar-list")
 def fetchEventList():
-    Calendar.fetchEventList()
+    calendarController.fetchEventList()
     return "取得"
 
 if __name__ == "__main__":
