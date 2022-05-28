@@ -1,1 +1,3 @@
 app/__pycache__
+app/credentials.json
+app/token.json
