@@ -1,9 +1,15 @@
 from calendar import calendar
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from calendar_test import Calendar
 from calendarController import calendarController
 
 app = Flask(__name__)
+
+CORS(
+    app,
+    supports_credentials=True
+)
 
 @app.route("/")
 def index():
