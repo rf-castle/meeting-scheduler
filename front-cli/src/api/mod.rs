@@ -1,11 +1,11 @@
-use std::collections::HashMap;
 use chrono::{DateTime, TimeZone, Utc};
 use const_format::concatcp;
 use maplit::hashmap;
 use reqwest::blocking::Client;
 use reqwest::Result;
 use std::fmt;
-use serde::Deserialize;
+use crate::util::date_for_api;
+use linked_hash_map::LinkedHashMap;
 
 const ENDPOINT: &str = "http://localhost:9000";
 
@@ -17,7 +17,7 @@ pub struct FreeDateArgs {}
 pub trait API {
     // Todo: ログイン
     fn search_reserved_date(&self, company: &str) -> Result<()>;
-    fn check_free_date(&self, args: &FreeDateArgs) -> Result<Vec<DateRange<Utc>>>;
+    fn check_free_date(&self, args: &FreeDateArgs) -> Result<Vec<String>>;
     fn reserve_date<Tz: TimeZone>(&self, company: &str, dates: &[DateRange<Tz>]) -> Result<()>
     where
         Tz::Offset: fmt::Display;
@@ -38,16 +38,7 @@ impl APIImpl {
     }
 }
 
-fn date_for_api<Tz: TimeZone>(range: &DateRange<Tz>) -> String
-where
-    Tz::Offset: fmt::Display,
-{
-    format!(
-        "{} - {}",
-        range.0.format("%m/%d %H:%M"),
-        range.1.format("%H:%M")
-    )
-}
+
 
 
 impl API for APIImpl {
@@ -55,13 +46,18 @@ impl API for APIImpl {
         Ok(())
     }
 
-    fn check_free_date(&self, args: &FreeDateArgs) -> Result<Vec<DateRange<Utc>>> {
+    fn check_free_date(&self, _args: &FreeDateArgs) -> Result<Vec<String>> {
         let response = self.client
             .get(concatcp!(ENDPOINT, "/empty-dates"))
             .send()?
             .error_for_status()?;
-        let body: HashMap<String, Vec<String>> = response.json()?;
-        Ok(vec![])
+        let body: LinkedHashMap<String, Vec<String>> = response.json()?;
+        Ok(
+            body
+                .into_iter()
+                .map(|(k, v)| format!("{} {}", k, v.join(", ")))
+                .collect::<Vec<String>>()
+        )
     }
 
     fn reserve_date<Tz: TimeZone>(&self, company: &str, dates: &[DateRange<Tz>]) -> Result<()>

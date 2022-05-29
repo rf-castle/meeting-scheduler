@@ -1,3 +1,4 @@
+use std::fmt;
 use chrono::format::{parse, Parsed, StrftimeItems};
 use chrono::{
     DateTime, Datelike, Local, NaiveDate, NaiveDateTime, NaiveTime, ParseError, ParseResult,
@@ -23,4 +24,15 @@ pub(crate) fn format_time(date: NaiveTime) -> String {
 
 pub(crate) fn format_datetime(date: NaiveDateTime) -> String {
     format!("{} {}", format_date(date.date()), format_time(date.time()))
+}
+
+pub(crate) fn date_for_api<Tz: TimeZone>(range: &(DateTime<Tz>, DateTime<Tz>)) -> String
+    where
+        Tz::Offset: fmt::Display,
+{
+    format!(
+        "{} - {}",
+        range.0.format("%m/%d %H:%M"),
+        range.1.format("%H:%M")
+    )
 }
