@@ -2,4 +2,4 @@ mod api;
 pub mod command;
 mod util;
 
-pub use api::{API, APIImpl};
+pub use api::{APIImpl, API};
