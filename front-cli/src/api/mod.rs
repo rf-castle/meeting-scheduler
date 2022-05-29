@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use chrono::{DateTime, TimeZone, Utc};
 use const_format::concatcp;
 use maplit::hashmap;
@@ -16,7 +17,8 @@ pub struct FreeDateArgs {}
 
 pub trait API {
     // Todo: ログイン
-    fn search_reserved_date(&self, company: &str) -> Result<()>;
+    fn search_reserved_dates(&self) -> Result<HashMap<String, Vec<String>>>;
+    fn search_reserved_date(&self, company: &str) -> Result<Vec<String>>;
     fn check_free_date(&self, args: &FreeDateArgs) -> Result<Vec<String>>;
     fn reserve_date<Tz: TimeZone>(&self, company: &str, dates: &[DateRange<Tz>]) -> Result<()>
     where
@@ -42,8 +44,21 @@ impl APIImpl {
 
 
 impl API for APIImpl {
-    fn search_reserved_date(&self, company: &str) -> Result<()> {
-        Ok(())
+    fn search_reserved_dates(&self) -> Result<HashMap<String, Vec<String>>> {
+        let response = self.client
+            .get(concatcp!(ENDPOINT, "/interview-dates"))
+            .send()?
+            .error_for_status()?;
+        println!("{}", response.text()?);
+        Ok(HashMap::new())
+    }
+
+    fn search_reserved_date(&self, company: &str) -> Result<Vec<String>> {
+        let response = self.client
+            .get( format!("{}/interview-dates/{}", ENDPOINT, company))
+            .send()?
+            .error_for_status()?;
+        Ok(vec![])
     }
 
     fn check_free_date(&self, _args: &FreeDateArgs) -> Result<Vec<String>> {

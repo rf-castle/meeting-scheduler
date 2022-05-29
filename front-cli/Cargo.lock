@@ -241,6 +241,7 @@ dependencies = [
  "chrono",
  "clap",
  "const_format",
+ "linked-hash-map",
  "maplit",
  "mockall",
  "once_cell",
@@ -479,6 +480,16 @@ name = "libc"
 version = "0.2.126"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "349d5a591cd28b49e1d1037471617a32ddcda5731b99419008085f72d5a53836"
+
+[[package]]
+name = "linked-hash-map"
+version = "0.5.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "7fb9b38af92608140b86b693604b9ffcc5824240a484d1ecd4795bacb2fe88f3"
+dependencies = [
+ "serde",
+ "serde_test",
+]
 
 [[package]]
 name = "log"
@@ -896,6 +907,15 @@ checksum = "9b7ce2b32a1aed03c558dc61a5cd328f15aff2dbc17daad8fb8af04d2100e15c"
 dependencies = [
  "itoa",
  "ryu",
+ "serde",
+]
+
+[[package]]
+name = "serde_test"
+version = "1.0.137"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fe196827aea34242c314d2f0dd49ed00a129225e80dda71b0dbf65d54d25628d"
+dependencies = [
  "serde",
 ]
 

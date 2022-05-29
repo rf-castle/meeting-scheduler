@@ -13,7 +13,6 @@ class CalendarAPI:
 
     @staticmethod
     def register_candidates(company_name, candidate_datetimes):
-
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
         service = build('calendar', 'v3', credentials=creds)
 
@@ -58,6 +57,8 @@ class CalendarAPI:
 
         # 面接日を登録
         start_datetime, end_datetime = CalendarAPI.format_by_rfc(interview_datetime)
+        print(interview_datetime)
+        print(start_datetime, end_datetime)
         event = {
                 'summary': company_name + 'の面接日',
                 'start': {

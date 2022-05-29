@@ -31,6 +31,7 @@ def registerCandidates():
 def registerInterviewDate():
     company_name = str(request.form.get("company"))
     interview_dates = request.form.get("candidate_dates")
+    print(interview_dates)
     return jsonify(calendarController.registerInterviewDate(company_name, interview_dates)), 201
 
 # 面接一覧取得（本日からのやつ）
