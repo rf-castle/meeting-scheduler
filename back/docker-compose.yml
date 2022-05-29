@@ -8,4 +8,12 @@ services:
       - ./app:/workspace
     working_dir: /workspace
     command: python server.py
+  nuxt:
+    build: ./docker/nuxt
+    ports:
+      - 4000:3000
+    volumes:
+      - ./nuxt_app:/workspace
+    working_dir: /workspace
+    command: yarn run dev
     
